@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
+            DontDestroyOnLoad(gameObject); // ƒV[ƒ“Ø‚è‘Ö‚¦‚Å‚àÁ‚¦‚È‚¢
         }
         else
         {
