@@ -1,8 +1,12 @@
+using TMPro;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance; // シングルトンでどこからでも呼べる
+
+    [SerializeField] private TMP_Text scoreText;
+    [SerializeField] private TMP_Text timeText;
 
     private int score = 0;
     private float elapsedTime = 0f;
@@ -24,6 +28,10 @@ public class GameManager : MonoBehaviour
     private void Update()
     {
         elapsedTime += Time.deltaTime;
+        if (timeText != null)
+        {
+            timeText.text = $"Time: {elapsedTime:F1}";
+        }
     }
 
     // スコア加算
@@ -31,6 +39,11 @@ public class GameManager : MonoBehaviour
     {
         score += amount;
         Debug.Log("Score: " + score);
+
+        if (scoreText != null)
+        {
+            scoreText.text = $"Score: {score}";
+        }
     }
 
     // 時間取得
@@ -44,5 +57,7 @@ public class GameManager : MonoBehaviour
     {
         return score;
     }
+
+
 }
 

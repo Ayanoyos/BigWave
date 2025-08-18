@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 5281625787134349246}
   - component: {fileID: 2130382272972705589}
   m_Layer: 0
-  m_Name: wave1_0
+  m_Name: wave1
   m_TagString: Wave
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

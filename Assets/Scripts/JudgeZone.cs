@@ -1,3 +1,4 @@
+using UnityEngine.UI;
 using UnityEngine;
 
 public class JudgeZone : MonoBehaviour
@@ -7,7 +8,7 @@ public class JudgeZone : MonoBehaviour
     [SerializeField] private UnityEngine.UI.Image aButtonImage;
     [SerializeField] private UnityEngine.UI.Image sButtonImage;
     [SerializeField] private UnityEngine.UI.Image dButtonImage;
-    [SerializeField] private float displayTime = 0.3f;
+    [SerializeField] private float displayTime = 1.0f;
 
     private Wave currentWave;
 
@@ -51,17 +52,20 @@ public class JudgeZone : MonoBehaviour
         if (distance <= perfectRange)
         {
             Debug.Log("Perfect! " + wave.RequiredKey);
-            GameManager.Instance.AddScore(2);
+            GameManager.Instance.AddScore(10);
             ShowButtonImage(wave.RequiredKey);
         }
         else if (distance <= goodRange)
         {
             Debug.Log("Good! " + wave.RequiredKey);
-            GameManager.Instance.AddScore(1);
+            GameManager.Instance.AddScore(5);
+            ShowButtonImage(wave.RequiredKey);
         }
         else
         {
             Debug.Log("Miss! " + wave.RequiredKey);
+            GameManager.Instance.AddScore(-2);
+            ShowButtonImage(wave.RequiredKey);
         }
 
         Destroy(wave.gameObject);
@@ -72,8 +76,15 @@ public class JudgeZone : MonoBehaviour
         if (collision.CompareTag("Wave"))
         {
             currentWave = collision.GetComponent<Wave>();
+
+            if (currentWave != null)
+            {
+                // 波が入ってきたときに対応ボタンをUIで表示
+                ShowButtonImage(currentWave.RequiredKey, true);
+            }
         }
     }
+
 
     private void OnTriggerExit2D(Collider2D collision)
     {
@@ -83,9 +94,37 @@ public class JudgeZone : MonoBehaviour
             {
                 currentWave = null;
                 Debug.Log("Miss!");
+
+                // 波が抜けたので非表示
+                ShowButtonImage(KeyCode.None, false);
             }
         }
     }
+
+
+    public void ShowButtonImage(KeyCode key, bool visible)
+    {
+        UnityEngine.UI.Image img = null;
+
+        switch (key)
+        {
+            case KeyCode.A: img = aButtonImage; break;
+            case KeyCode.S: img = sButtonImage; break;
+            case KeyCode.D: img = dButtonImage; break;
+        }
+
+        if (img != null)
+        {
+            img.enabled = visible;
+        }
+        else if (key == KeyCode.None) // 強制OFF用
+        {
+            aButtonImage.enabled = false;
+            sButtonImage.enabled = false;
+            dButtonImage.enabled = false;
+        }
+    }
+
 
     // Sceneビューで範囲を可視化
     private void OnDrawGizmos()
