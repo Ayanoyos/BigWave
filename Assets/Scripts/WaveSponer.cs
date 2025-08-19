@@ -11,6 +11,8 @@ public class WaveSpawner : MonoBehaviour
     [SerializeField] private float spawnInterval = 2f;
     [SerializeField] private Transform spawnPoint;
 
+
+
     private void Start()
     {
         StartCoroutine(SpawnRoutine());
@@ -49,4 +51,7 @@ public class WaveSpawner : MonoBehaviour
             Instantiate(prefab, spawnPoint.position, Quaternion.identity);
         }
     }
+
+
+
 }

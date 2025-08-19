@@ -103,6 +103,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 5
   requiredKey: 100
+  heightLevel: 3
 --- !u!58 &2130382272972705589
 CircleCollider2D:
   m_ObjectHideFlags: 0

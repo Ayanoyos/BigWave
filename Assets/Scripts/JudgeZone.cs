@@ -11,6 +11,17 @@ public class JudgeZone : MonoBehaviour
     [SerializeField] private float displayTime = 1.0f;
 
     private Wave currentWave;
+    public enum JudgeResult { Perfect, Good, Miss }
+
+    [SerializeField] private GameObject player;      // インスペクタでセット
+    private Rigidbody2D playerRb;                    // 物理処理用
+
+    private void Start()
+    {
+        player = GameObject.FindWithTag("Player"); // Player に Tag をつけておく
+        if (player != null)
+            playerRb = player.GetComponent<Rigidbody2D>();
+    }
 
     private void Update()
     {
@@ -49,26 +60,47 @@ public class JudgeZone : MonoBehaviour
     {
         float distance = Mathf.Abs(transform.position.x - wave.transform.position.x);
 
+        JudgeResult result;
+
         if (distance <= perfectRange)
         {
             Debug.Log("Perfect! " + wave.RequiredKey);
             GameManager.Instance.AddScore(10);
             ShowButtonImage(wave.RequiredKey);
+            result = JudgeResult.Perfect;
         }
         else if (distance <= goodRange)
         {
             Debug.Log("Good! " + wave.RequiredKey);
             GameManager.Instance.AddScore(5);
             ShowButtonImage(wave.RequiredKey);
+            result = JudgeResult.Good;
         }
         else
         {
             Debug.Log("Miss! " + wave.RequiredKey);
             GameManager.Instance.AddScore(-2);
             ShowButtonImage(wave.RequiredKey);
+            result = JudgeResult.Miss;
         }
 
         Destroy(wave.gameObject);
+
+
+        // JudgeZone.cs の判定成功処理あたり
+        if (result == JudgeResult.Good || result == JudgeResult.Perfect)
+        {
+            float targetY = wave.GetHeightPosition();
+
+            // AddForceでジャンプっぽい動き
+            playerRb.AddForce(Vector2.up * 5f, ForceMode2D.Impulse);
+
+            // 高さにスナップ（少し遅らせて到達させてもOK）
+            player.transform.position = new Vector2(player.transform.position.x, targetY);
+
+            GameManager.Instance.AddScore(100);
+        }
+
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
