@@ -1,15 +1,19 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    public static GameManager Instance; // シングルトンでどこからでも呼べる
+    public static GameManager Instance { get; private set; } // シングルトンでどこからでも呼べる
 
     [SerializeField] private TMP_Text scoreText;
     [SerializeField] private TMP_Text timeText;
+    [SerializeField] private float startTime = 60f; // 初期タイマー時間（60秒）
 
     private int score = 0;
     private float elapsedTime = 0f;
+    private bool isTimeUp = false;
 
     private void Awake()
     {
@@ -25,9 +29,27 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    private void Start()
+    {
+        elapsedTime = startTime;
+    }
+
     private void Update()
     {
-        elapsedTime += Time.deltaTime;
+        if (!isTimeUp)
+        {
+            elapsedTime -= Time.deltaTime;
+            if (elapsedTime <= 0)
+            {
+                elapsedTime = 0;
+                isTimeUp = true;
+
+                Debug.Log($"ゲーム終了時のスコア: {score}"); // ここで確認
+                // ここでリザルト画面へ
+                SceneManager.LoadScene("ResultScene");
+            }
+        }
+
         if (timeText != null)
         {
             timeText.text = $"Time: {elapsedTime:F1}";

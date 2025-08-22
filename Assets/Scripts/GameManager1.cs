@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class GameManager1 : MonoBehaviour
 {
-    public static GameManager1 Instance; // シングルトンでどこからでも呼べる
+    public static GameManager1 Instance { get; private set; } // シングルトンでどこからでも呼べる
 
     [SerializeField] private TMP_Text scoreText;
     [SerializeField] private TMP_Text timeText;
@@ -44,6 +44,7 @@ public class GameManager1 : MonoBehaviour
                 elapsedTime = 0;
                 isTimeUp = true;
 
+                Debug.Log($"ゲーム終了時のスコア: {score}"); // ここで確認
                 // ここでリザルト画面へ
                 SceneManager.LoadScene("ResultScene");
             }
