@@ -3,16 +3,17 @@ using  UnityEngine.SceneManagement;
 
 public class SceneChanger : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public void SceneCollect(string str)
     {
-        // —á: ƒQ[ƒ€ƒV[ƒ“‚ÉØ‚è‘Ö‚¦
-        SceneManager.LoadScene("GameScene");
-    }
+        switch (str)
+        {
+            case "game":
+                SceneManager.LoadScene("GameScene");
+                break;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+            case "title":
+                SceneManager.LoadScene("TitleScene");
+                break;
+        }
     }
 }
